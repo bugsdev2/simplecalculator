@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="X-UA-Compatible"
+      content="IE=edge"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-900">
+    <h1 class="text-center font-bold text-2xl text-white mt-10">Simple Calculator</h1>
+    <div class="flex flex-col gap-2 md:flex-row md:gap-5 justify-center items-center mt-5">
+      <div>
+        <input
+          class="border border-slate-900 rounded px-2 py-1 text-center"
+          type="text"
+          id="num1"
+          name="num1"
+          type="number"
+        />
+      </div>
+      <div>
+        <select
+          class="text-xl flex px-2 rounded"
+          name="operation"
+          id="operation"
+        >
+          <option value="Addition">+</option>
+          <option value="Substraction">−</option>
+          <option value="Multiplication">×</option>
+          <option value="Division">÷</option>
+        </select>
+      </div>
+      <div>
+        <input
+          class="border border-slate-900 rounded px-2 py-1 text-center"
+          type="text"
+          id="num2"
+          name="num2"
+          type="password"
+        />
+      </div>
+    </div>
+    <div class="flex justify-center items-center mt-5">
+      <button
+        class="bg-green-400 text-light px-5 py-1 rounded-xl active:bg-green-600"
+        id="answerBtn"
+      >
+        Answer
+      </button>
+    </div>
+    <div
+      id="answer"
+      class="text-center mt-20 text-white text-6xl"
+    ></div>
+    <script>
+      class Calculator {
+        constructor(num1, num2) {
+          this.num1 = parseFloat(num1);
+          this.num2 = parseFloat(num2);
+        }
+      }
+
+      class Add extends Calculator {
+        operation = 'Addition';
+        action() {
+          if (num1 === '' || num2 === '') return;
+          return this.num1 + this.num2;
+        }
+      }
+
+      class Sub extends Calculator {
+        operation = 'Substraction';
+        action() {
+          if (num1 === '' || num2 === '') return;
+          return this.num1 - this.num2;
+        }
+      }
+
+      class Mul extends Calculator {
+        operation = 'Multiplication';
+        action() {
+          if (num1 === '' || num2 === '') return;
+          return this.num1 * this.num2;
+        }
+      }
+
+      class Div extends Calculator {
+        operation = 'Division';
+        action() {
+          if (this.num2 === 0) {
+            throw new Error('Number cannot be divided by 0');
+          }
+          if (num1 === '' || num2 === '') return;
+
+          return (this.num1 / this.num2).toFixed(2);
+        }
+      }
+
+      let num1 = document.querySelector('#num1').value;
+      let num2 = document.querySelector('#num2').value;
+
+      let operation = document.querySelector('#operation').value;
+
+      let answerBtn = document.querySelector('#answerBtn');
+
+      let answer = document.querySelector('#answer');
+
+      document.querySelector('#num1').addEventListener('change', (e) => {
+        num1 = e.target.value;
+      });
+
+      document.querySelector('#num2').addEventListener('change', (e) => {
+        num2 = e.target.value;
+      });
+
+      document.querySelector('#operation').addEventListener('change', (e) => {
+        operation = e.target.value;
+      });
+
+      answerBtn.addEventListener('click', handleAnswer);
+
+      function handleAnswer() {
+        const mathArr = [new Add(num1, num2), new Sub(num1, num2), new Mul(num1, num2), new Div(num1, num2)];
+        for (let obj of mathArr) {
+          if (obj.operation === operation) {
+            answer.textContent = obj.action();
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
